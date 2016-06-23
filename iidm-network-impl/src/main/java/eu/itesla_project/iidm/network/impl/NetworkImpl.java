@@ -350,6 +350,41 @@ class NetworkImpl extends IdentifiableImpl implements Network, MultiStateObject,
     }
 
     @Override
+    public HvdcConverterStation<?> getHvdcConverterStation(String id) {
+        return null;
+    }
+
+    @Override
+    public int getHvdcConverterStationCount() {
+        return 0;
+    }
+
+    @Override
+    public Iterable<HvdcConverterStation<?>> getHvdcConverterStations() {
+        return null;
+    }
+
+    @Override
+    public HvdcLine getHvdcLine(String id) {
+        return null;
+    }
+
+    @Override
+    public int getHvdcLineCount() {
+        return 0;
+    }
+
+    @Override
+    public Iterable<HvdcLine> getHvdcLines() {
+        return null;
+    }
+
+    @Override
+    public HvdcLineAdder newHvdcLine() {
+        return null;
+    }
+
+    @Override
     public Identifiable getIdentifiable(String id) {
         return objectStore.get(id, Identifiable.class);
     }

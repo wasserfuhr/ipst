@@ -229,4 +229,15 @@ public class ValidationUtil {
         }
     }
 
+    static void checkConverterMode(Validable validable, HvdcConverterStation.ConverterMode converterMode) {
+        if (converterMode == null) {
+            throw new ValidationException(validable, "converter mode is invalid");
+        }
+    }
+
+    public static void checkNumberOfPoleInService(Validable validable, int numberOfPoleInService) {
+        if (numberOfPoleInService < 0) {
+            throw new RuntimeException();
+        }
+    }
 }

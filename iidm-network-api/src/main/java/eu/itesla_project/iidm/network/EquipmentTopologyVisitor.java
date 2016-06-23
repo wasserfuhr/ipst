@@ -49,4 +49,8 @@ public abstract class EquipmentTopologyVisitor extends AbstractTopologyVisitor {
         visitEquipment(danglingLine);
     }
 
+    @Override
+    public void visitHvdcConverterStation(HvdcConverterStation<?> converterStation) {
+        visitEquipment(converterStation);
+    }
 }

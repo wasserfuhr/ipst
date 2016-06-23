@@ -18,5 +18,6 @@ public enum ConnectableType {
     GENERATOR,
     LOAD,
     SHUNT_COMPENSATOR,
-    DANGLING_LINE
+    DANGLING_LINE,
+    HVDC_CONVERTER_STATION
 }

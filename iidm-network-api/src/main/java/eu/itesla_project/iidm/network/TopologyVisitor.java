@@ -28,4 +28,7 @@ public interface TopologyVisitor {
 
     void visitDanglingLine(DanglingLine danglingLine);
 
+    void visitHvdcConverterStation(HvdcConverterStation<?> converterStation);
+
+    void visitHvdcLine(HvdcLine hvdcLine);
 }

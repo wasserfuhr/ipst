@@ -180,9 +180,20 @@
             <xs:enumeration value="OTHER"/>
         </xs:restriction>
     </xs:simpleType>
-    <xs:complexType name="Generator">
+    <xs:complexType name="Injection">
         <xs:complexContent>
             <xs:extension base="iidm:Identifiable">
+                <xs:attribute name="node" use="optional" type="xs:int"/>
+                <xs:attribute name="bus" use="optional" type="iidm:nonEmptyString"/>
+                <xs:attribute name="connectableBus" use="optional" type="iidm:nonEmptyString"/>
+                <xs:attribute name="p" use="optional" type="xs:float"/>
+                <xs:attribute name="q" use="optional" type="xs:float"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="Generator">
+        <xs:complexContent>
+            <xs:extension base="iidm:Injection">
                 <xs:sequence>
                     <xs:element name="regulatingTerminal" minOccurs="0" type="iidm:TerminalRef"/>
                     <xs:element name="reactiveCapabilityCurve" minOccurs="0" type="iidm:ReactiveCapabilityCurve"/>
@@ -196,11 +207,6 @@
                 <xs:attribute name="targetP" use="required" type="xs:float"/>
                 <xs:attribute name="targetQ" use="optional" type="xs:float"/>
                 <xs:attribute name="targetV" use="optional" type="xs:float"/>
-                <xs:attribute name="node" use="optional" type="xs:int"/>
-                <xs:attribute name="bus" use="optional" type="iidm:nonEmptyString"/>
-                <xs:attribute name="connectableBus" use="optional" type="iidm:nonEmptyString"/>
-                <xs:attribute name="p" use="optional" type="xs:float"/>
-                <xs:attribute name="q" use="optional" type="xs:float"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -213,28 +219,19 @@
     </xs:simpleType>
     <xs:complexType name="Load">
         <xs:complexContent>
-            <xs:extension base="iidm:Identifiable">
+            <xs:extension base="iidm:Injection">
                 <xs:attribute name="p0" use="required" type="xs:float"/>
                 <xs:attribute name="q0" use="required" type="xs:float"/>
                 <xs:attribute name="loadType" use="optional" type="iidm:LoadType"/>
-                <xs:attribute name="node" use="optional" type="xs:int"/>
-                <xs:attribute name="bus" use="optional" type="iidm:nonEmptyString"/>
-                <xs:attribute name="connectableBus" use="optional" type="iidm:nonEmptyString"/>
-                <xs:attribute name="p" use="optional" type="xs:float"/>
-                <xs:attribute name="q" use="optional" type="xs:float"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="ShuntCompensator">
         <xs:complexContent>
-            <xs:extension base="iidm:Identifiable">
+            <xs:extension base="iidm:Injection">
                 <xs:attribute name="bPerSection" use="required" type="xs:float"/>
                 <xs:attribute name="maximumSectionCount" use="required" type="xs:int"/>
                 <xs:attribute name="currentSectionCount" use="required" type="xs:int"/>
-                <xs:attribute name="node" use="optional" type="xs:int"/>
-                <xs:attribute name="bus" use="optional" type="iidm:nonEmptyString"/>
-                <xs:attribute name="connectableBus" use="optional" type="iidm:nonEmptyString"/>
-                <xs:attribute name="q" use="optional" type="xs:float"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -265,11 +262,6 @@
                 <xs:attribute name="g" use="required" type="xs:float"/>
                 <xs:attribute name="b" use="required" type="xs:float"/>
                 <xs:attribute name="ucteXnodeCode" use="optional" type="iidm:nonEmptyString"/>
-                <xs:attribute name="node" use="optional" type="xs:int"/>
-                <xs:attribute name="bus" use="optional" type="iidm:nonEmptyString"/>
-                <xs:attribute name="connectableBus" use="optional" type="iidm:nonEmptyString"/>
-                <xs:attribute name="p" use="optional" type="xs:float"/>
-                <xs:attribute name="q" use="optional" type="xs:float"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -460,6 +452,55 @@
                 <xs:attribute name="b2_2" use="required" type="xs:float"/>
                 <xs:attribute name="xnodeP_2" use="required" type="xs:float"/>
                 <xs:attribute name="xnodeQ_2" use="required" type="xs:float"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:simpleType name="ConverterMode">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="RECTIFIER"/>
+            <xs:enumeration value="INVERTER"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="HvdcConverterStation">
+        <xs:complexContent>
+            <xs:extension base="iidm:Injection">
+                <xs:attribute name="converterMode" use="required" type="iidm:ConverterMode"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="VscConverterStation">
+        <xs:complexContent>
+            <xs:extension base="iidm:HvdcConverterStation">
+                <xs:attribute name="voltageRegulatorOn" use="required" type="xs:boolean"/>
+                <xs:attribute name="targetQ" use="optional" type="xs:float"/>
+                <xs:attribute name="targetV" use="optional" type="xs:float"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="Filter">
+        <xs:attribute name="b" use="required" type="xs:float"/>
+        <xs:attribute name="connected" use="required" type="xs:boolean"/>
+    </xs:complexType>
+    <xs:complexType name="LccConverterStation">
+        <xs:complexContent>
+            <xs:extension base="iidm:HvdcConverterStation">
+                <xs:sequence>
+                    <xs:element name="filter" type="iidm:Filter" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+                <xs:attribute name="powerFactor" use="required" type="xs:float"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="HvdcLine">
+        <xs:complexContent>
+            <xs:extension base="iidm:Identifiable">
+                <xs:attribute name="r" use="required" type="xs:float"/>
+                <xs:attribute name="nominalV" use="required" type="xs:float"/>
+                <xs:attribute name="targetP" use="required" type="xs:float"/>
+                <xs:attribute name="maxP" use="required" type="xs:float"/>
+                <xs:attribute name="numberOfPoleInService" use="required" type="xs:nonNegativeInteger"/>
+                <xs:attribute name="converterStation1" use="required" type="iidm:nonEmptyString"/>
+                <xs:attribute name="converterStation2" use="required" type="iidm:nonEmptyString"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
