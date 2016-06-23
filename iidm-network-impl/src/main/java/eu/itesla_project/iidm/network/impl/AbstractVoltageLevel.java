@@ -203,7 +203,7 @@ abstract class AbstractVoltageLevel extends IdentifiableImpl implements VoltageL
 
     @Override
     public LccConverterStationAdder newLccConverterStation() {
-        return null;
+        return new LccConverterStationAdderImpl(this);
     }
 
     @Override

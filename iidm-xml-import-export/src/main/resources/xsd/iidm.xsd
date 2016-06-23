@@ -455,17 +455,15 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-    <xs:simpleType name="ConverterMode">
+    <xs:simpleType name="ConvertersMode">
         <xs:restriction base="xs:string">
-            <xs:enumeration value="RECTIFIER"/>
-            <xs:enumeration value="INVERTER"/>
+            <xs:enumeration value="SIDE_1_RECTIFIER_SIDE_2_INVERTER"/>
+            <xs:enumeration value="SIDE_1_INVERTER_SIDE_2_RECTIFIER"/>
         </xs:restriction>
     </xs:simpleType>
     <xs:complexType name="HvdcConverterStation">
         <xs:complexContent>
-            <xs:extension base="iidm:Injection">
-                <xs:attribute name="converterMode" use="required" type="iidm:ConverterMode"/>
-            </xs:extension>
+            <xs:extension base="iidm:Injection" />
         </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="VscConverterStation">
@@ -498,7 +496,8 @@
                 <xs:attribute name="nominalV" use="required" type="xs:float"/>
                 <xs:attribute name="targetP" use="required" type="xs:float"/>
                 <xs:attribute name="maxP" use="required" type="xs:float"/>
-                <xs:attribute name="numberOfPoleInService" use="required" type="xs:nonNegativeInteger"/>
+                <xs:attribute name="convertersMode" use="required" type="iidm:ConvertersMode"/>
+                <xs:attribute name="inService" use="required" type="xs:boolean"/>
                 <xs:attribute name="converterStation1" use="required" type="iidm:nonEmptyString"/>
                 <xs:attribute name="converterStation2" use="required" type="iidm:nonEmptyString"/>
             </xs:extension>

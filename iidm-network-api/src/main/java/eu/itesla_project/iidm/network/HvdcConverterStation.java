@@ -23,31 +23,9 @@ public interface HvdcConverterStation<T extends HvdcConverterStation<T>> extends
     }
 
     /**
-     * Converter mode used to known the sign of the active power of the HVDC line.
-     */
-    enum ConverterMode {
-        RECTIFIER,
-        INVERTER
-    }
-
-    /**
      * Get HVDC type.
      * @return HVDC type
      */
     HvdcType getHvdcType();
-
-    /**
-     * Get converter mode. If the converter is in rectifier mode active power of the connected HVDC line is positive
-     * otherwise negative.
-     * @return the converter mode
-     */
-    ConverterMode getConverterMode();
-
-    /**
-     * Change the converter mode.
-     * @param mode the converter mode
-     * @return the station itself to allow method chaining.
-     */
-    T setConverterMode(ConverterMode mode);
 
 }

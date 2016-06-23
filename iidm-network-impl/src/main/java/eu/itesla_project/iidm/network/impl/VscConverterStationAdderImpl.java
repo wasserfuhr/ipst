@@ -8,12 +8,10 @@ package eu.itesla_project.iidm.network.impl;
 
 import eu.itesla_project.iidm.network.VscConverterStationAdder;
 
-import java.util.Objects;
-
 /**
  * @author Geoffroy Jamgotchian <geoffroy.jamgotchian at rte-france.com>
  */
-class VscConverterStationAdderImpl extends HvdcConverterStationAdderImpl<VscConverterStationAdderImpl> implements VscConverterStationAdder {
+class VscConverterStationAdderImpl extends SingleTerminalConnectableAdderImpl<VscConverterStationAdderImpl> implements VscConverterStationAdder {
 
     private final VoltageLevelExt voltageLevel;
 
@@ -24,7 +22,7 @@ class VscConverterStationAdderImpl extends HvdcConverterStationAdderImpl<VscConv
     private float targetV = Float.NaN;
 
     VscConverterStationAdderImpl(VoltageLevelExt voltageLevel) {
-        this.voltageLevel = Objects.requireNonNull(voltageLevel);
+        this.voltageLevel = voltageLevel;
     }
 
     @Override
@@ -34,7 +32,7 @@ class VscConverterStationAdderImpl extends HvdcConverterStationAdderImpl<VscConv
 
     @Override
     protected String getTypeDescription() {
-        return "vscConverterStation";
+        return VscConverterStationImpl.TYPE_DESCRIPTION;
     }
 
     @Override
@@ -58,11 +56,11 @@ class VscConverterStationAdderImpl extends HvdcConverterStationAdderImpl<VscConv
     @Override
     public VscConverterStationImpl add() {
         String id = checkAndGetUniqueId();
+        String name = getName();
         TerminalExt terminal = checkAndGetTerminal(id);
-        ValidationUtil.checkConverterMode(this, converterMode);
         ValidationUtil.checkVoltageControl(this, voltageRegulatorOn, targetV, targetQ);
         VscConverterStationImpl converterStation
-                = new VscConverterStationImpl(id, getName(), getNetwork().getRef(), converterMode, voltageRegulatorOn, targetQ, targetV);
+                = new VscConverterStationImpl(id, name, getNetwork().getRef(), voltageRegulatorOn, targetQ, targetV);
         converterStation.addTerminal(terminal);
         voltageLevel.attach(terminal, false);
         getNetwork().getObjectStore().checkAndAdd(converterStation);

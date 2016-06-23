@@ -229,15 +229,21 @@ public class ValidationUtil {
         }
     }
 
-    static void checkConverterMode(Validable validable, HvdcConverterStation.ConverterMode converterMode) {
-        if (converterMode == null) {
-            throw new ValidationException(validable, "converter mode is invalid");
+    static void checkConvertersMode(Validable validable, HvdcLine.ConvertersMode convertersMode) {
+        if (convertersMode == null) {
+            throw new ValidationException(validable, "converters mode is invalid");
         }
     }
 
-    public static void checkNumberOfPoleInService(Validable validable, int numberOfPoleInService) {
-        if (numberOfPoleInService < 0) {
-            throw new RuntimeException();
+    static void checkInService(Validable validable, Boolean inService) {
+         if (inService == null) {
+            throw new ValidationException(validable, "in service is not set");
+        }
+    }
+
+    public static void checkPowerFactor(Validable validable, float powerFactor) {
+       if (Float.isNaN(powerFactor)) {
+            throw new ValidationException(validable, "power factor is invalid");
         }
     }
 }

@@ -17,6 +17,8 @@ import java.util.List;
  */
 class LccConverterStationImpl extends HvdcConverterStationImpl<LccConverterStation> implements LccConverterStation {
 
+    static final String TYPE_DESCRIPTION = "lccConverterStation";
+
     static class FilterImpl implements Filter {
 
         private float b;
@@ -50,8 +52,8 @@ class LccConverterStationImpl extends HvdcConverterStationImpl<LccConverterStati
 
     private final List<Filter> filters = new ArrayList<>();
 
-    LccConverterStationImpl(String id, String name, Ref<? extends MultiStateObject> ref, ConverterMode converterMode, float powerFactor) {
-        super(id, name, ref, converterMode);
+    LccConverterStationImpl(String id, String name, Ref<? extends MultiStateObject> ref, float powerFactor) {
+        super(id, name, ref);
         this.powerFactor = powerFactor;
     }
 
@@ -62,7 +64,7 @@ class LccConverterStationImpl extends HvdcConverterStationImpl<LccConverterStati
 
     @Override
     protected String getTypeDescription() {
-        return "lccConverterStation";
+        return TYPE_DESCRIPTION;
     }
 
     @Override
@@ -72,6 +74,7 @@ class LccConverterStationImpl extends HvdcConverterStationImpl<LccConverterStati
 
     @Override
     public LccConverterStation setPowerFactor(float powerFactor) {
+        ValidationUtil.checkPowerFactor(this, powerFactor);
         float oldValue = this.powerFactor;
         this.powerFactor = powerFactor;
         notifyUpdate("powerFactor", oldValue, powerFactor);

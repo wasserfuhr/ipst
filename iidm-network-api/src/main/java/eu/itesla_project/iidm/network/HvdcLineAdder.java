@@ -15,17 +15,19 @@ public interface HvdcLineAdder extends IdentifiableAdder<HvdcLineAdder> {
 
     HvdcLineAdder setR(float r);
 
+    HvdcLineAdder setConvertersMode(HvdcLine.ConvertersMode convertersMode);
+
     HvdcLineAdder setNominalV(float nominalV);
 
     HvdcLineAdder setTargetP(float targetP);
 
     HvdcLineAdder setMaxP(float maxP);
 
-    HvdcLineAdder setNumberOfPoleInService(int numberOfPoleInService);
+    HvdcLineAdder setInService(boolean inService);
 
-    HvdcLineAdder setConverterStationId1(String converterStationId);
+    HvdcLineAdder setConverterStationId1(String converterStationId1);
 
-    HvdcLineAdder setConverterStationId2(String converterStationId);
+    HvdcLineAdder setConverterStationId2(String converterStationId2);
 
     HvdcLine add();
 }

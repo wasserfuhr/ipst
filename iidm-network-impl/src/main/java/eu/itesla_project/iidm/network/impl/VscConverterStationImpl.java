@@ -17,15 +17,17 @@ import java.util.BitSet;
  */
 class VscConverterStationImpl extends HvdcConverterStationImpl<VscConverterStation> implements VscConverterStation {
 
+    static final String TYPE_DESCRIPTION = "vscConverterStation";
+
     private final BitSet voltageRegulatorOn;
 
     private final TFloatArrayList targetQ;
 
     private final TFloatArrayList targetV;
 
-    VscConverterStationImpl(String id, String name, Ref<? extends MultiStateObject> ref, ConverterMode converterMode,
-                            boolean voltageRegulatorOn, float targetQ, float targetV) {
-        super(id, name, ref, converterMode);
+    VscConverterStationImpl(String id, String name, Ref<? extends MultiStateObject> ref, boolean voltageRegulatorOn,
+                            float targetQ, float targetV) {
+        super(id, name, ref);
         int stateArraySize = ref.get().getStateManager().getStateArraySize();
         this.voltageRegulatorOn = new BitSet(stateArraySize);
         this.targetQ = new TFloatArrayList(stateArraySize);
@@ -44,7 +46,7 @@ class VscConverterStationImpl extends HvdcConverterStationImpl<VscConverterStati
 
     @Override
     protected String getTypeDescription() {
-        return "vscConverterStation";
+        return TYPE_DESCRIPTION;
     }
 
     @Override

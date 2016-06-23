@@ -15,10 +15,31 @@ package eu.itesla_project.iidm.network;
 public interface HvdcLine extends Identifiable {
 
     /**
+     * Converters mode used to known the sign of the active power of the HVDC line.
+     */
+    enum ConvertersMode {
+        SIDE_1_RECTIFIER_SIDE_2_INVERTER,
+        SIDE_1_INVERTER_SIDE_2_RECTIFIER
+    }
+
+    /**
      * Get the network this HVDC line belongs.
      * @return the network this HVDC line belongs
      */
     Network getNetwork();
+
+    /**
+     * Get converters mode.
+     * @return converters mode
+     */
+    ConvertersMode getConvertersMode();
+
+    /**
+     * Change converters mode.
+     * @param mode converters mode
+     * @return the station itself to allow method chaining.
+     */
+    HvdcLine setConvertersMode(ConvertersMode mode);
 
     /**
      * Get resistance (in &#937;) of the line.
@@ -73,17 +94,17 @@ public interface HvdcLine extends Identifiable {
     HvdcLine setMaxP(float maxP);
 
     /**
-     * Get the number of pole in service.
-     * @return the number of pole in service
+     * Check the line is in service.
+     * @return true if the line in service, false otherwise
      */
-    int getNumberOfPoleInService();
+    boolean isInService();
 
     /**
-     * Set the number of pole in service.
-     * @param numberOfPoleInService the number of pole in service
-     * @return
+     * Set the service status if the line.
+     * @param inService true if the line in service, false otherwise
+     * @return the HVDC line itself to allow method chaining
      */
-    HvdcLine setNumberOfPoleInService(int numberOfPoleInService);
+    HvdcLine setInService(boolean inService);
 
     /**
      * Get the HVDC converter station connected on side 1.
