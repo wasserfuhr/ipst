@@ -17,7 +17,7 @@ import java.util.Objects;
 /**
  * @author Geoffroy Jamgotchian <geoffroy.jamgotchian at rte-france.com>
  */
-abstract class HvdcConverterStationImpl<T extends HvdcConverterStation<T>> extends ConnectableImpl implements HvdcConverterStation<T> {
+abstract class HvdcConverterStationImpl<T extends HvdcConverterStation<T>> extends ConnectableImpl<T> implements HvdcConverterStation<T> {
 
     HvdcConverterStationImpl(String id, String name, Ref<? extends MultiStateObject> ref) {
         super(id, name);

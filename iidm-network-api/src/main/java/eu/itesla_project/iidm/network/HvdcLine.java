@@ -12,7 +12,7 @@ package eu.itesla_project.iidm.network;
  *
  * @author Geoffroy Jamgotchian <geoffroy.jamgotchian at rte-france.com>
  */
-public interface HvdcLine extends Identifiable {
+public interface HvdcLine extends Identifiable<HvdcLine> {
 
     /**
      * Converters mode used to known the sign of the active power of the HVDC line.

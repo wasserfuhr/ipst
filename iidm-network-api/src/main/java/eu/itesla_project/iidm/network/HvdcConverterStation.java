@@ -12,7 +12,7 @@ package eu.itesla_project.iidm.network;
  *
  * @author Geoffroy Jamgotchian <geoffroy.jamgotchian at rte-france.com>
  */
-public interface HvdcConverterStation<T extends HvdcConverterStation<T>> extends SingleTerminalConnectable {
+public interface HvdcConverterStation<T extends HvdcConverterStation<T>> extends SingleTerminalConnectable<T> {
 
     /**
      * HDVC mode: VSC or LCC

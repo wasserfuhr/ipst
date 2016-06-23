@@ -12,7 +12,7 @@ import java.util.Objects;
 /**
  * @author Geoffroy Jamgotchian <geoffroy.jamgotchian@rte-france.com>
  */
-class HvdcLineImpl extends IdentifiableImpl implements HvdcLine, Stateful {
+class HvdcLineImpl extends IdentifiableImpl<HvdcLine> implements HvdcLine, Stateful {
 
     static final String TYPE_DESCRIPTION = "hvdcLine";
 
