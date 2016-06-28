@@ -122,6 +122,22 @@ class VoltageLevelXml extends IdentifiableXml<VoltageLevel, VoltageLevelAdder, S
                 DanglingLineXml.INSTANCE.write(dl, null, context);
             }
         }
+        if (vl.getVscConverterStationCount() > 0) {
+            for (VscConverterStation cs : vl.getVscConverterStations()) {
+                if (!context.getFilter().test(cs)) {
+                    continue;
+                }
+                VscConverterStationXml.INSTANCE.write(cs, vl, context);
+            }
+        }
+        if (vl.getLccConverterStationCount() > 0) {
+            for (LccConverterStation cs : vl.getLccConverterStations()) {
+                if (!context.getFilter().test(cs)) {
+                    continue;
+                }
+                LccConverterStationXml.INSTANCE.write(cs, vl, context);
+            }
+        }
     }
 
     @Override
@@ -197,6 +213,14 @@ class VoltageLevelXml extends IdentifiableXml<VoltageLevel, VoltageLevelAdder, S
 
                 case DanglingLineXml.ROOT_ELEMENT_NAME:
                     DanglingLineXml.INSTANCE.read(reader, vl, endTasks);
+                    break;
+
+                case VscConverterStationXml.ROOT_ELEMENT_NAME:
+                    VscConverterStationXml.INSTANCE.read(reader, vl, endTasks);
+                    break;
+
+                case LccConverterStationXml.ROOT_ELEMENT_NAME:
+                    LccConverterStationXml.INSTANCE.read(reader, vl, endTasks);
                     break;
 
                 default:

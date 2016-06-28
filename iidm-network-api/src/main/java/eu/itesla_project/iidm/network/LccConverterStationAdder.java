@@ -13,18 +13,7 @@ package eu.itesla_project.iidm.network;
  */
 public interface LccConverterStationAdder extends SingleTerminalConnectableAdder<LccConverterStationAdder> {
 
-    interface FilterAdder {
-
-        FilterAdder setB(float b);
-
-        FilterAdder setConnected(boolean connected);
-
-        LccConverterStationAdder endFilter();
-    }
-
     LccConverterStationAdder setPowerFactor(float powerFactor);
-
-    FilterAdder beginFilter();
 
     LccConverterStation add();
 }

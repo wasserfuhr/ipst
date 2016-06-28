@@ -39,11 +39,6 @@ class LccConverterStationAdderImpl extends SingleTerminalConnectableAdderImpl<Lc
     }
 
     @Override
-    public FilterAdder beginFilter() {
-        return null;
-    }
-
-    @Override
     public LccConverterStation add() {
         String id = checkAndGetUniqueId();
         String name = getName();

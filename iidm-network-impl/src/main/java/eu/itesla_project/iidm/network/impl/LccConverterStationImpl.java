@@ -7,6 +7,8 @@
 package eu.itesla_project.iidm.network.impl;
 
 import eu.itesla_project.iidm.network.LccConverterStation;
+import eu.itesla_project.iidm.network.LccFilter;
+import eu.itesla_project.iidm.network.LccFilterAdder;
 import eu.itesla_project.iidm.network.impl.util.Ref;
 
 import java.util.ArrayList;
@@ -19,38 +21,9 @@ class LccConverterStationImpl extends HvdcConverterStationImpl<LccConverterStati
 
     static final String TYPE_DESCRIPTION = "lccConverterStation";
 
-    static class FilterImpl implements Filter {
-
-        private float b;
-
-        private boolean connected;
-
-        @Override
-        public float getB() {
-            return b;
-        }
-
-        @Override
-        public Filter setB(float b) {
-            this.b = b;
-            return this;
-        }
-
-        @Override
-        public boolean isConnected() {
-            return connected;
-        }
-
-        @Override
-        public Filter setConnected(boolean connected) {
-            this.connected = connected;
-            return this;
-        }
-    }
-
     private float powerFactor;
 
-    private final List<Filter> filters = new ArrayList<>();
+    private final List<LccFilterImpl> filters = new ArrayList<>();
 
     LccConverterStationImpl(String id, String name, Ref<? extends MultiStateObject> ref, float powerFactor) {
         super(id, name, ref);
@@ -81,8 +54,35 @@ class LccConverterStationImpl extends HvdcConverterStationImpl<LccConverterStati
         return this;
     }
 
-    @Override
-    public List<Filter> getFilters() {
+    List<LccFilterImpl> getFilters() {
         return filters;
+    }
+
+    private void checkFilterIndex(int index) {
+        if (index < 0 || index >= filters.size()) {
+            throw new RuntimeException("Bad filter index " + index);
+        }
+    }
+
+    @Override
+    public LccFilter getFilterAt(int index) {
+        checkFilterIndex(index);
+        return filters.get(index);
+    }
+
+    @Override
+    public LccFilterAdder newFilter() {
+        return new LccFilterAdderImpl(this);
+    }
+
+    @Override
+    public int getFilterCount() {
+        return filters.size();
+    }
+
+    @Override
+    public void removeFilterAt(int index) {
+        checkFilterIndex(index);
+        filters.remove(index);
     }
 }

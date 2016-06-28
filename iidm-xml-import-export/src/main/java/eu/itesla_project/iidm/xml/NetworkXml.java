@@ -157,6 +157,12 @@ public class NetworkXml implements XmlConstants {
                 LineXml.INSTANCE.write(l, n, context);
             }
         }
+        for (HvdcLine l : n.getHvdcLines()) {
+            if (!filter.test(l.getConverterStation1()) && filter.test(l.getConverterStation2())) {
+                continue;
+            }
+            HvdcLineXml.INSTANCE.write(l, n, context);
+        }
 
         // write extensions
         writeExtensions(n, context);
@@ -205,11 +211,6 @@ public class NetworkXml implements XmlConstants {
     }
 
     public static Network read(InputStream is, XmlImportConfig config) throws XMLStreamException, SAXException, IOException {
-        // validate with schema
-        if (config.isSchemaValidation()) {
-            validateWithExtensions(is);
-        }
-
         XMLStreamReader reader = XML_INPUT_FACTORY_SUPPLIER.get().createXMLStreamReader(is);
         reader.next();
 
@@ -236,6 +237,10 @@ public class NetworkXml implements XmlConstants {
 
                 case TieLineXml.ROOT_ELEMENT_NAME:
                     TieLineXml.INSTANCE.read(reader, network, endTasks);
+                    break;
+
+                case HvdcLineXml.ROOT_ELEMENT_NAME:
+                    HvdcLineXml.INSTANCE.read(reader, network, endTasks);
                     break;
 
                 case EXTENSION_ELEMENT_NAME:
@@ -305,7 +310,8 @@ public class NetworkXml implements XmlConstants {
                 case GeneratorXml.ROOT_ELEMENT_NAME:
                 case LoadXml.ROOT_ELEMENT_NAME:
                 case ShuntXml.ROOT_ELEMENT_NAME:
-                case DanglingLineXml.ROOT_ELEMENT_NAME: {
+                case DanglingLineXml.ROOT_ELEMENT_NAME:
+                case VscConverterStationXml.ROOT_ELEMENT_NAME: {
                     String id = reader.getAttributeValue(null, "id");
                     float p = XmlUtil.readOptionalFloatAttribute(reader, "p");
                     float q = XmlUtil.readOptionalFloatAttribute(reader, "q");

@@ -6,47 +6,12 @@
  */
 package eu.itesla_project.iidm.network;
 
-import java.util.List;
-
 /**
  * LCC converter station.
  *
  * @author Geoffroy Jamgotchian <geoffroy.jamgotchian at rte-france.com>
  */
 public interface LccConverterStation extends HvdcConverterStation<LccConverterStation> {
-
-    /**
-     * Harmonic filter.
-     * q = b * v^2
-     */
-    interface Filter {
-
-        /**
-         * Get filter susceptance (&#937;).
-         * @return
-         */
-        float getB();
-
-        /**
-         * Set filter susceptance (&#937;).
-         * @param b filter susceptance;
-         * @return the filter itself to allow method chaining
-         */
-        Filter setB(float b);
-
-        /**
-         * Check the filter is connected.
-         * @return true if the filter is connected, false otherwise.
-         */
-        boolean isConnected();
-
-        /**
-         * Set the connection status of the filter.
-         * @param connected the new connection status of the filter
-         * @return the filter itself to allow method chaining
-         */
-        Filter setConnected(boolean connected);
-    }
 
     /**
      * Get power factor (ratio of the active power and the apparent power)
@@ -62,8 +27,28 @@ public interface LccConverterStation extends HvdcConverterStation<LccConverterSt
     LccConverterStation setPowerFactor(float powerFactor);
 
     /**
-     * Get harmonic filters associated to this converter.
-     * @return harmonic filters associated to this converter
+     * Get a builder to create a new filter.
+     * @return a builder to create a new filter
      */
-    List<Filter> getFilters();
+    LccFilterAdder newFilter();
+
+    /**
+     * Get filter count.
+     * @return filter count
+     */
+    int getFilterCount();
+
+    /**
+     * Remove a filter based on its index.
+     * @param index index of the filter to remove
+     */
+    void removeFilterAt(int index);
+
+    /**
+     * Get a filter based on its index.
+     * @param index index of the filter to get
+     * @return the filter corresponding to the index
+     */
+    LccFilter getFilterAt(int index);
+
 }

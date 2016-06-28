@@ -24,6 +24,7 @@
                  <xs:choice minOccurs="0" maxOccurs="unbounded">
                      <xs:element name="line" type="iidm:Line"/>
                      <xs:element name="tieLine" type="iidm:TieLine"/>
+                     <xs:element name="hvdcLine" type="iidm:HvdcLine"/>
                  </xs:choice>
                  <xs:element name="extension" minOccurs="0" maxOccurs="unbounded">
                      <xs:complexType>
@@ -96,6 +97,8 @@
                     <xs:element name="load" minOccurs="0" maxOccurs="unbounded" type="iidm:Load"/>
                     <xs:element name="shunt" minOccurs="0" maxOccurs="unbounded" type="iidm:ShuntCompensator"/>
                     <xs:element name="danglingLine" minOccurs="0" maxOccurs="unbounded" type="iidm:DanglingLine"/>
+                    <xs:element name="vscConverterStation" minOccurs="0" maxOccurs="unbounded" type="iidm:VscConverterStation"/>
+                    <xs:element name="lccConverterStation" minOccurs="0" maxOccurs="unbounded" type="iidm:LccConverterStation"/>
                 </xs:sequence>
                 <xs:attribute name="nominalV" use="required" type="xs:float"/>
                 <xs:attribute name="topologyKind" use="required" type="iidm:TopologyKind"/>
