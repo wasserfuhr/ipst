@@ -708,6 +708,21 @@ public interface VoltageLevel extends Container<VoltageLevel> {
     int getDanglingLineCount();
 
     /**
+     * Get a builder to create a new static var compensator.
+     */
+    StaticVarCompensatorAdder newStaticVarCompensator();
+
+    /**
+     * Get static var compensators.
+     */
+    Iterable<StaticVarCompensator> getStaticVarCompensators();
+
+    /**
+     * Get static var compensator count.
+     */
+    int getStaticVarCompensatorCount();
+
+    /**
      * Get a builder to create a new VSC converter station connected to this voltage level.
      * @return a builder to create a new VSC converter
      */
