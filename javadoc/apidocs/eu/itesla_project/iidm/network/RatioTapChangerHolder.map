@@ -1,0 +1,8 @@
+<map id="G" name="G">
+<area shape="rect" id="node1_0" href="./ThreeWindingsTransformer.Leg2or3.html" title="eu.itesla_project.iidm.network.ThreeWindingsTransformer.Leg2or3" alt="" coords="16,113,101,154"/>
+<area shape="rect" id="node1" href="./ThreeWindingsTransformer.Leg2or3.html" title="&lt;TABLE&gt;" alt="" coords="5,107,112,159"/>
+<area shape="rect" id="node2_1" href="./RatioTapChangerHolder.html" title="eu.itesla_project.iidm.network.RatioTapChangerHolder" alt="" coords="65,11,226,53"/>
+<area shape="rect" id="node2" href="./RatioTapChangerHolder.html" title="&lt;TABLE&gt;" alt="" coords="54,6,237,58"/>
+<area shape="rect" id="node3_2" href="./TwoWindingsTransformer.html" title="eu.itesla_project.iidm.network.TwoWindingsTransformer" alt="" coords="147,113,317,154"/>
+<area shape="rect" id="node3" href="./TwoWindingsTransformer.html" title="&lt;TABLE&gt;" alt="" coords="137,107,327,159"/>
+</map>

@@ -1,0 +1,16 @@
+<map id="G" name="G">
+<area shape="rect" id="node1_0" href="./SingleTerminalConnectable.html" title="eu.itesla_project.iidm.network.SingleTerminalConnectable" alt="" coords="289,113,469,154"/>
+<area shape="rect" id="node1" href="./SingleTerminalConnectable.html" title="&lt;TABLE&gt;" alt="" coords="278,107,479,159"/>
+<area shape="rect" id="node2_1" href="./ShuntCompensator.html" title="eu.itesla_project.iidm.network.ShuntCompensator" alt="" coords="16,214,149,255"/>
+<area shape="rect" id="node2" href="./ShuntCompensator.html" title="&lt;TABLE&gt;" alt="" coords="5,209,160,261"/>
+<area shape="rect" id="node3_2" href="./DanglingLine.html" title="eu.itesla_project.iidm.network.DanglingLine" alt="" coords="195,214,291,255"/>
+<area shape="rect" id="node3" href="./DanglingLine.html" title="&lt;TABLE&gt;" alt="" coords="184,209,301,261"/>
+<area shape="rect" id="node4_3" href="./Generator.html" title="eu.itesla_project.iidm.network.Generator" alt="" coords="336,214,421,255"/>
+<area shape="rect" id="node4" href="./Generator.html" title="&lt;TABLE&gt;" alt="" coords="325,209,432,261"/>
+<area shape="rect" id="node5_4" href="./Load.html" title="eu.itesla_project.iidm.network.Load" alt="" coords="467,214,552,255"/>
+<area shape="rect" id="node5" href="./Load.html" title="&lt;TABLE&gt;" alt="" coords="456,209,563,261"/>
+<area shape="rect" id="node6_5" href="./BusbarSection.html" title="eu.itesla_project.iidm.network.BusbarSection" alt="" coords="598,214,703,255"/>
+<area shape="rect" id="node6" href="./BusbarSection.html" title="&lt;TABLE&gt;" alt="" coords="587,209,714,261"/>
+<area shape="rect" id="node7_6" href="./Connectable.html" title="eu.itesla_project.iidm.network.Connectable" alt="" coords="332,11,425,53"/>
+<area shape="rect" id="node7" href="./Connectable.html" title="&lt;TABLE&gt;" alt="" coords="321,6,436,58"/>
+</map>

@@ -1,0 +1,10 @@
+<map id="G" name="G">
+<area shape="rect" id="node1_0" href="./Substation.html" title="eu.itesla_project.iidm.network.Substation" alt="" coords="16,214,101,255"/>
+<area shape="rect" id="node1" href="./Substation.html" title="&lt;TABLE&gt;" alt="" coords="5,209,112,261"/>
+<area shape="rect" id="node2_1" href="./VoltageLevel.html" title="eu.itesla_project.iidm.network.VoltageLevel" alt="" coords="147,214,243,255"/>
+<area shape="rect" id="node2" href="./VoltageLevel.html" title="&lt;TABLE&gt;" alt="" coords="136,209,253,261"/>
+<area shape="rect" id="node3_2" href="./Container.html" title="eu.itesla_project.iidm.network.Container" alt="" coords="84,113,169,154"/>
+<area shape="rect" id="node3" href="./Container.html" title="&lt;TABLE&gt;" alt="" coords="73,107,180,159"/>
+<area shape="rect" id="node4_3" href="./Identifiable.html" title="eu.itesla_project.iidm.network.Identifiable" alt="" coords="84,11,169,53"/>
+<area shape="rect" id="node4" href="./Identifiable.html" title="&lt;TABLE&gt;" alt="" coords="73,6,180,58"/>
+</map>

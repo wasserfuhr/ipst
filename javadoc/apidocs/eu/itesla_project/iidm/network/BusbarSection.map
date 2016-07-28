@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" id="node1_0" href="./SingleTerminalConnectable.html" title="eu.itesla_project.iidm.network.SingleTerminalConnectable" alt="" coords="15,11,195,53"/>
+<area shape="rect" id="node1" href="./SingleTerminalConnectable.html" title="&lt;TABLE&gt;" alt="" coords="5,6,206,58"/>
+<area shape="rect" id="node2_1" href="./BusbarSection.html" title="eu.itesla_project.iidm.network.BusbarSection" alt="" coords="53,113,158,154"/>
+<area shape="rect" id="node2" href="./BusbarSection.html" title="&lt;TABLE&gt;" alt="" coords="42,107,169,159"/>
+</map>

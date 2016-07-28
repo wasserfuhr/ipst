@@ -1,0 +1,22 @@
+<map id="G" name="G">
+<area shape="rect" id="node1_0" href="./ThreeWindingsTransformerAdder.html" title="eu.itesla_project.iidm.network.ThreeWindingsTransformerAdder" alt="" coords="15,113,227,154"/>
+<area shape="rect" id="node1" href="./ThreeWindingsTransformerAdder.html" title="&lt;TABLE&gt;" alt="" coords="5,107,238,159"/>
+<area shape="rect" id="node2_1" href="./TwoTerminalsConnectableAdder.html" title="eu.itesla_project.iidm.network.TwoTerminalsConnectableAdder" alt="" coords="273,113,751,154"/>
+<area shape="rect" id="node2" href="./TwoTerminalsConnectableAdder.html" title="&lt;TABLE&gt;" alt="" coords="263,107,761,159"/>
+<area shape="rect" id="node3_2" href="./VoltageLevel.NodeBreakerView.SwitchAdder.html" title="eu.itesla_project.iidm.network.VoltageLevel.NodeBreakerView.SwitchAdder" alt="" coords="797,113,891,154"/>
+<area shape="rect" id="node3" href="./VoltageLevel.NodeBreakerView.SwitchAdder.html" title="&lt;TABLE&gt;" alt="" coords="786,107,902,159"/>
+<area shape="rect" id="node4_3" href="./VoltageLevel.NodeBreakerView.InternalConnectionAdder.html" title="eu.itesla_project.iidm.network.VoltageLevel.NodeBreakerView.InternalConnectionAdder" alt="" coords="937,113,1101,154"/>
+<area shape="rect" id="node4" href="./VoltageLevel.NodeBreakerView.InternalConnectionAdder.html" title="&lt;TABLE&gt;" alt="" coords="926,107,1111,159"/>
+<area shape="rect" id="node5_4" href="./VoltageLevel.BusBreakerView.SwitchAdder.html" title="eu.itesla_project.iidm.network.VoltageLevel.BusBreakerView.SwitchAdder" alt="" coords="1146,113,1241,154"/>
+<area shape="rect" id="node5" href="./VoltageLevel.BusBreakerView.SwitchAdder.html" title="&lt;TABLE&gt;" alt="" coords="1135,107,1251,159"/>
+<area shape="rect" id="node6_5" href="./VoltageLevelAdder.html" title="eu.itesla_project.iidm.network.VoltageLevelAdder" alt="" coords="1286,113,1415,154"/>
+<area shape="rect" id="node6" href="./VoltageLevelAdder.html" title="&lt;TABLE&gt;" alt="" coords="1275,107,1426,159"/>
+<area shape="rect" id="node7_6" href="./BusbarSectionAdder.html" title="eu.itesla_project.iidm.network.BusbarSectionAdder" alt="" coords="1461,113,1601,154"/>
+<area shape="rect" id="node7" href="./BusbarSectionAdder.html" title="&lt;TABLE&gt;" alt="" coords="1450,107,1611,159"/>
+<area shape="rect" id="node8_7" href="./IdentifiableAdder.html" title="eu.itesla_project.iidm.network.IdentifiableAdder" alt="" coords="1047,11,1340,53"/>
+<area shape="rect" id="node8" href="./IdentifiableAdder.html" title="&lt;TABLE&gt;" alt="" coords="1036,6,1351,58"/>
+<area shape="rect" id="node9_8" href="./SubstationAdder.html" title="eu.itesla_project.iidm.network.SubstationAdder" alt="" coords="1647,113,1764,154"/>
+<area shape="rect" id="node9" href="./SubstationAdder.html" title="&lt;TABLE&gt;" alt="" coords="1636,107,1775,159"/>
+<area shape="rect" id="node10_9" href="./SingleTerminalConnectableAdder.html" title="eu.itesla_project.iidm.network.SingleTerminalConnectableAdder" alt="" coords="1809,113,2295,154"/>
+<area shape="rect" id="node10" href="./SingleTerminalConnectableAdder.html" title="&lt;TABLE&gt;" alt="" coords="1799,107,2305,159"/>
+</map>

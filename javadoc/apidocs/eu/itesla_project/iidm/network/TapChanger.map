@@ -1,0 +1,8 @@
+<map id="G" name="G">
+<area shape="rect" id="node1_0" href="./TapChanger.html" title="eu.itesla_project.iidm.network.TapChanger" alt="" coords="16,11,565,53"/>
+<area shape="rect" id="node1" href="./TapChanger.html" title="&lt;TABLE&gt;" alt="" coords="5,6,576,58"/>
+<area shape="rect" id="node2_1" href="./RatioTapChanger.html" title="eu.itesla_project.iidm.network.RatioTapChanger" alt="" coords="144,113,267,154"/>
+<area shape="rect" id="node2" href="./RatioTapChanger.html" title="&lt;TABLE&gt;" alt="" coords="133,107,277,159"/>
+<area shape="rect" id="node3_2" href="./PhaseTapChanger.html" title="eu.itesla_project.iidm.network.PhaseTapChanger" alt="" coords="313,113,442,154"/>
+<area shape="rect" id="node3" href="./PhaseTapChanger.html" title="&lt;TABLE&gt;" alt="" coords="302,107,453,159"/>
+</map>

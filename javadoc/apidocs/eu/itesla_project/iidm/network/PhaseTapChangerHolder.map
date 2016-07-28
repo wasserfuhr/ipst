@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" id="node1_0" href="./PhaseTapChangerHolder.html" title="eu.itesla_project.iidm.network.PhaseTapChangerHolder" alt="" coords="17,11,183,53"/>
+<area shape="rect" id="node1" href="./PhaseTapChangerHolder.html" title="&lt;TABLE&gt;" alt="" coords="6,6,194,58"/>
+<area shape="rect" id="node2_1" href="./TwoWindingsTransformer.html" title="eu.itesla_project.iidm.network.TwoWindingsTransformer" alt="" coords="15,113,185,154"/>
+<area shape="rect" id="node2" href="./TwoWindingsTransformer.html" title="&lt;TABLE&gt;" alt="" coords="5,107,195,159"/>
+</map>

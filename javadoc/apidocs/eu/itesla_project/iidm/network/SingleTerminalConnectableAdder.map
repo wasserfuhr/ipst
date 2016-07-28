@@ -1,0 +1,14 @@
+<map id="G" name="G">
+<area shape="rect" id="node1_0" href="./LoadAdder.html" title="eu.itesla_project.iidm.network.LoadAdder" alt="" coords="16,214,101,255"/>
+<area shape="rect" id="node1" href="./LoadAdder.html" title="&lt;TABLE&gt;" alt="" coords="5,209,112,261"/>
+<area shape="rect" id="node2_1" href="./IdentifiableAdder.html" title="eu.itesla_project.iidm.network.IdentifiableAdder" alt="" coords="148,11,441,53"/>
+<area shape="rect" id="node2" href="./IdentifiableAdder.html" title="&lt;TABLE&gt;" alt="" coords="137,6,452,58"/>
+<area shape="rect" id="node6_2" href="./SingleTerminalConnectableAdder.html" title="eu.itesla_project.iidm.network.SingleTerminalConnectableAdder" alt="" coords="52,113,537,154"/>
+<area shape="rect" id="node6" href="./SingleTerminalConnectableAdder.html" title="&lt;TABLE&gt;" alt="" coords="41,107,548,159"/>
+<area shape="rect" id="node3_3" href="./GeneratorAdder.html" title="eu.itesla_project.iidm.network.GeneratorAdder" alt="" coords="147,214,259,255"/>
+<area shape="rect" id="node3" href="./GeneratorAdder.html" title="&lt;TABLE&gt;" alt="" coords="136,209,269,261"/>
+<area shape="rect" id="node4_4" href="./ShuntCompensatorAdder.html" title="eu.itesla_project.iidm.network.ShuntCompensatorAdder" alt="" coords="305,214,471,255"/>
+<area shape="rect" id="node4" href="./ShuntCompensatorAdder.html" title="&lt;TABLE&gt;" alt="" coords="294,209,482,261"/>
+<area shape="rect" id="node5_5" href="./DanglingLineAdder.html" title="eu.itesla_project.iidm.network.DanglingLineAdder" alt="" coords="517,214,646,255"/>
+<area shape="rect" id="node5" href="./DanglingLineAdder.html" title="&lt;TABLE&gt;" alt="" coords="506,209,657,261"/>
+</map>

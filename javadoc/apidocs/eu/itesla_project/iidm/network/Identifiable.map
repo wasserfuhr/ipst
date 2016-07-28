@@ -1,0 +1,14 @@
+<map id="G" name="G">
+<area shape="rect" id="node1_0" href="./Bus.html" title="eu.itesla_project.iidm.network.Bus" alt="" coords="16,113,101,154"/>
+<area shape="rect" id="node1" href="./Bus.html" title="&lt;TABLE&gt;" alt="" coords="5,107,112,159"/>
+<area shape="rect" id="node2_1" href="./Network.html" title="eu.itesla_project.iidm.network.Network" alt="" coords="147,113,232,154"/>
+<area shape="rect" id="node2" href="./Network.html" title="&lt;TABLE&gt;" alt="" coords="136,107,243,159"/>
+<area shape="rect" id="node3_2" href="./Container.html" title="eu.itesla_project.iidm.network.Container" alt="" coords="277,113,363,154"/>
+<area shape="rect" id="node3" href="./Container.html" title="&lt;TABLE&gt;" alt="" coords="267,107,373,159"/>
+<area shape="rect" id="node4_3" href="./Switch.html" title="eu.itesla_project.iidm.network.Switch" alt="" coords="408,113,493,154"/>
+<area shape="rect" id="node4" href="./Switch.html" title="&lt;TABLE&gt;" alt="" coords="397,107,504,159"/>
+<area shape="rect" id="node5_4" href="./Identifiable.html" title="eu.itesla_project.iidm.network.Identifiable" alt="" coords="277,11,363,53"/>
+<area shape="rect" id="node5" href="./Identifiable.html" title="&lt;TABLE&gt;" alt="" coords="267,6,373,58"/>
+<area shape="rect" id="node6_5" href="./Connectable.html" title="eu.itesla_project.iidm.network.Connectable" alt="" coords="539,113,632,154"/>
+<area shape="rect" id="node6" href="./Connectable.html" title="&lt;TABLE&gt;" alt="" coords="528,107,643,159"/>
+</map>

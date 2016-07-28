@@ -1,0 +1,8 @@
+<map id="G" name="G">
+<area shape="rect" id="node1_0" href="./LineCharasteristics.html" title="eu.itesla_project.iidm.network.LineCharasteristics" alt="" coords="45,11,203,53"/>
+<area shape="rect" id="node1" href="./LineCharasteristics.html" title="&lt;TABLE&gt;" alt="" coords="35,6,213,58"/>
+<area shape="rect" id="node2_1" href="./Line.html" title="eu.itesla_project.iidm.network.Line" alt="" coords="16,113,101,154"/>
+<area shape="rect" id="node2" href="./Line.html" title="&lt;TABLE&gt;" alt="" coords="5,107,112,159"/>
+<area shape="rect" id="node3_2" href="./TieLine.HalfLine.html" title="eu.itesla_project.iidm.network.TieLine.HalfLine" alt="" coords="147,113,232,154"/>
+<area shape="rect" id="node3" href="./TieLine.HalfLine.html" title="&lt;TABLE&gt;" alt="" coords="136,107,243,159"/>
+</map>

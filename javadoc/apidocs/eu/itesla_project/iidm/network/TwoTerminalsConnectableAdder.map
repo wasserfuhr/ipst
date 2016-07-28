@@ -1,0 +1,12 @@
+<map id="G" name="G">
+<area shape="rect" id="node1_0" href="./TieLineAdder.html" title="eu.itesla_project.iidm.network.TieLineAdder" alt="" coords="69,214,166,255"/>
+<area shape="rect" id="node1" href="./TieLineAdder.html" title="&lt;TABLE&gt;" alt="" coords="58,209,177,261"/>
+<area shape="rect" id="node2_1" href="./TwoTerminalsConnectableAdder.html" title="eu.itesla_project.iidm.network.TwoTerminalsConnectableAdder" alt="" coords="16,113,493,154"/>
+<area shape="rect" id="node2" href="./TwoTerminalsConnectableAdder.html" title="&lt;TABLE&gt;" alt="" coords="5,107,504,159"/>
+<area shape="rect" id="node3_2" href="./LineAdder.html" title="eu.itesla_project.iidm.network.LineAdder" alt="" coords="212,214,297,255"/>
+<area shape="rect" id="node3" href="./LineAdder.html" title="&lt;TABLE&gt;" alt="" coords="201,209,308,261"/>
+<area shape="rect" id="node4_3" href="./TwoWindingsTransformerAdder.html" title="eu.itesla_project.iidm.network.TwoWindingsTransformerAdder" alt="" coords="343,214,547,255"/>
+<area shape="rect" id="node4" href="./TwoWindingsTransformerAdder.html" title="&lt;TABLE&gt;" alt="" coords="333,209,558,261"/>
+<area shape="rect" id="node5_4" href="./IdentifiableAdder.html" title="eu.itesla_project.iidm.network.IdentifiableAdder" alt="" coords="108,11,401,53"/>
+<area shape="rect" id="node5" href="./IdentifiableAdder.html" title="&lt;TABLE&gt;" alt="" coords="97,6,412,58"/>
+</map>

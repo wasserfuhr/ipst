@@ -1,0 +1,12 @@
+<map id="G" name="G">
+<area shape="rect" id="node1_0" href="./SingleTerminalConnectable.html" title="eu.itesla_project.iidm.network.SingleTerminalConnectable" alt="" coords="15,214,195,255"/>
+<area shape="rect" id="node1" href="./SingleTerminalConnectable.html" title="&lt;TABLE&gt;" alt="" coords="5,209,206,261"/>
+<area shape="rect" id="node2_1" href="./ThreeWindingsTransformer.html" title="eu.itesla_project.iidm.network.ThreeWindingsTransformer" alt="" coords="241,214,418,255"/>
+<area shape="rect" id="node2" href="./ThreeWindingsTransformer.html" title="&lt;TABLE&gt;" alt="" coords="230,209,429,261"/>
+<area shape="rect" id="node3_2" href="./Identifiable.html" title="eu.itesla_project.iidm.network.Identifiable" alt="" coords="287,11,372,53"/>
+<area shape="rect" id="node3" href="./Identifiable.html" title="&lt;TABLE&gt;" alt="" coords="276,6,383,58"/>
+<area shape="rect" id="node5_3" href="./Connectable.html" title="eu.itesla_project.iidm.network.Connectable" alt="" coords="283,113,376,154"/>
+<area shape="rect" id="node5" href="./Connectable.html" title="&lt;TABLE&gt;" alt="" coords="272,107,387,159"/>
+<area shape="rect" id="node4_4" href="./TwoTerminalsConnectable.html" title="eu.itesla_project.iidm.network.TwoTerminalsConnectable" alt="" coords="464,214,640,255"/>
+<area shape="rect" id="node4" href="./TwoTerminalsConnectable.html" title="&lt;TABLE&gt;" alt="" coords="453,209,651,261"/>
+</map>
