@@ -22,7 +22,6 @@ import eu.itesla_project.iidm.network.*;
 import eu.itesla_project.iidm.network.VoltageLevel.NodeBreakerView.SwitchAdder;
 import eu.itesla_project.iidm.network.util.ShortIdDictionary;
 import gnu.trove.list.array.TIntArrayList;
-import org.joda.time.DateTime;
 import org.kohsuke.graphviz.Edge;
 import org.kohsuke.graphviz.Graph;
 import org.kohsuke.graphviz.Node;
@@ -36,6 +35,8 @@ import java.io.PrintStream;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  *
@@ -152,8 +153,7 @@ class NodeBreakerVoltageLevel extends AbstractVoltageLevel {
             if (kind == null) {
                 throw new ValidationException(this, "kind is not set");
             }
-            SwitchImpl _switch = new SwitchImpl(getNetwork().getRef(),
-                    id, getName(), kind, open, retained);
+            SwitchImpl _switch = new SwitchImpl(NodeBreakerVoltageLevel.this, id, getName(), kind, open, retained);
             getNetwork().getObjectStore().checkAndAdd(_switch);
             int e = graph.addEdge(node1, node2, _switch);
             switches.put(id, e);
@@ -336,6 +336,33 @@ class NodeBreakerVoltageLevel extends AbstractVoltageLevel {
             }
             return bus;
         }
+
+        BusExt getConnectableBus(int node) {
+            // check id the node is associated to a bus
+            BusExt connectableBus = getBus(node);
+            if (connectableBus != null) {
+                return connectableBus;
+            }
+            // if not traverse the graph starting from the node (without stopping at open switches) until finding another
+            // node associated to a bus
+            BusExt[] connectableBus2 = new BusExt[1];
+            graph.traverse(node, (v1, e, v2) -> {
+                connectableBus2[0] = getBus(v2);
+                if (connectableBus2[0] != null) {
+                    return TraverseResult.TERMINATE;
+                }
+                return TraverseResult.CONTINUE;
+            });
+            // if nothing found, just take the first bus
+            if (connectableBus2[0] != null) {
+                Iterator<CalculatedBus> it = getBuses().iterator();
+                if (!it.hasNext()) {
+                    throw new AssertionError("Should not happen");
+                }
+                return it.next();
+            }
+            return connectableBus2[0];
+        }
     }
 
     /**
@@ -410,38 +437,6 @@ class NodeBreakerVoltageLevel extends AbstractVoltageLevel {
             }
             return null;
         }
-
-        BusExt getConnectableBus(int node) {
-            if (getBus(node) != null) return getBus(node);
-            ArrayList<Integer> distance = new ArrayList<>(graph.getMaxVertex());
-            ArrayList<Integer> busBarSectionDistance = new ArrayList<>(graph.getMaxVertex());
-            for (int i = 0 ; i < graph.getMaxVertex() ; i++) {
-                distance.add(Integer.MAX_VALUE);
-                busBarSectionDistance.add(Integer.MAX_VALUE);
-            }
-            distance.set(node, 0);
-            graph.traverse(node, new Traverser<SwitchImpl>() {
-                @Override
-                public TraverseResult traverse(int v1, int e, int v2) {
-                    if (graph.getEdgeObject(e) != null) {
-                        distance.set(v2, distance.get(v1) + 1);
-                    } else {
-                        distance.set(v2, distance.get(v1));
-                    }
-                    if (graph.getVertexObject(v2) instanceof BusbarSection) {
-                        busBarSectionDistance.set(v2, distance.get(v2));
-                        return TraverseResult.TERMINATE;
-                    } else {
-                        return TraverseResult.CONTINUE;
-                    }
-                }
-            });
-            int minIndex = busBarSectionDistance.indexOf(Collections.min(busBarSectionDistance));
-            if (getBus(minIndex) == null) {
-                LOGGER.warn("No connectable bus for node " + node + " in voltage level " + getId());
-            }
-            return getBus(minIndex);
-        }
     }
 
     private static interface BusChecker {
@@ -476,6 +471,7 @@ class NodeBreakerVoltageLevel extends AbstractVoltageLevel {
                         case GENERATOR:
                         case SHUNT_COMPENSATOR:
                         case DANGLING_LINE:
+                        case STATIC_VAR_COMPENSATOR:
                             feederCount++;
                             break;
 
@@ -511,12 +507,20 @@ class NodeBreakerVoltageLevel extends AbstractVoltageLevel {
 
         private final Map<VoltageLevel, AtomicInteger> counter = new WeakHashMap<>();
 
+        private final Lock lock = new ReentrantLock();
+
         @Override
         public String getName(VoltageLevel voltageLevel, TIntArrayList nodes) {
-            AtomicInteger i = counter.get(voltageLevel);
-            if (i == null) {
-                i = new AtomicInteger();
-                counter.put(voltageLevel, i);
+            AtomicInteger i;
+            lock.lock();
+            try {
+                i = counter.get(voltageLevel);
+                if (i == null) {
+                    i = new AtomicInteger();
+                    counter.put(voltageLevel, i);
+                }
+            } finally {
+                lock.unlock();
             }
             return voltageLevel.getId() + "_" + i.getAndIncrement();
         }
@@ -548,7 +552,8 @@ class NodeBreakerVoltageLevel extends AbstractVoltageLevel {
         });
     }
 
-    private void invalidateCache() {
+    @Override
+    public void invalidateCache() {
         states.get().calculatedBusBreakerTopology.invalidateCache();
         states.get().calculatedBusTopology.invalidateCache();
         getNetwork().getConnectedComponentsManager().invalidate();
@@ -661,28 +666,6 @@ class NodeBreakerVoltageLevel extends AbstractVoltageLevel {
         }
 
         @Override
-        public NodeBreakerViewExt openSwitch(String switchId) {
-            Integer edge = getEdge(switchId, true);
-            SwitchImpl _switch = graph.getEdgeObject(edge);
-            if (!_switch.isOpen()) {
-                _switch.setOpen(true);
-                invalidateCache();
-            }
-            return this;
-        }
-
-        @Override
-        public NodeBreakerViewExt closeSwitch(String switchId) {
-            Integer edge = getEdge(switchId, true);
-            SwitchImpl _switch = graph.getEdgeObject(edge);
-            if (_switch.isOpen()) {
-                _switch.setOpen(false);
-                invalidateCache();
-            }
-            return this;
-        }
-
-        @Override
         public BusbarSectionAdder newBusbarSection() {
             return new BusbarSectionAdderImpl(NodeBreakerVoltageLevel.this);
         }
@@ -753,26 +736,6 @@ class NodeBreakerVoltageLevel extends AbstractVoltageLevel {
         @Override
         public void removeAllBuses() {
             throw createNotSupportedNodeBreakerTopologyException();
-        }
-
-        @Override
-        public BusBreakerView openSwitch(String switchId) {
-            SwitchImpl _switch = states.get().calculatedBusBreakerTopology.getSwitch(switchId, true);
-            if (!_switch.isOpen()) {
-                _switch.setOpen(true);
-                invalidateCache();
-            }
-            return this;
-        }
-
-        @Override
-        public BusBreakerView closeSwitch(String switchId) {
-            SwitchImpl _switch = states.get().calculatedBusBreakerTopology.getSwitch(switchId, true);
-            if (_switch.isOpen()) {
-                _switch.setOpen(false);
-                invalidateCache();
-            }
-            return this;
         }
 
         @Override
@@ -886,27 +849,63 @@ class NodeBreakerVoltageLevel extends AbstractVoltageLevel {
         // TODO remove unused connection nodes
     }
 
-    @Override
-    public void connect(TerminalExt terminal) {
-        assert terminal instanceof NodeTerminal;
-        int node = ((NodeTerminal) terminal).getNode();
-        // TODO
-        throw new UnsupportedOperationException("TODO");
+    private static boolean isBusbarSection(Terminal t) {
+        return t != null && t.getConnectable().getType() == ConnectableType.BUSBAR_SECTION;
+    }
+
+    private static boolean isOpenedDisconnector(Switch s) {
+        return s.getKind() == SwitchKind.DISCONNECTOR && s.isOpen();
     }
 
     @Override
-    public void disconnect(TerminalExt terminal) {
+    public boolean connect(TerminalExt terminal) {
         assert terminal instanceof NodeTerminal;
         int node = ((NodeTerminal) terminal).getNode();
-        // TODO
-        throw new IllegalStateException("TODO");
+        // find all paths starting from the current terminal to a busbar section that does not contain an open disconnector
+        // paths are already sorted
+        List<TIntArrayList> paths = graph.findAllPaths(node, NodeBreakerVoltageLevel::isBusbarSection, NodeBreakerVoltageLevel::isOpenedDisconnector);
+        boolean connected = false;
+        if (paths.size() > 0) {
+            // the shorted path is the best, close all opened breakers of the path
+            TIntArrayList shortestPath = paths.get(0);
+            for (int i = 0; i < shortestPath.size(); i++) {
+                int e = shortestPath.get(i);
+                SwitchImpl sw = graph.getEdgeObject(e);
+                if (sw.getKind() == SwitchKind.BREAKER && sw.isOpen()) {
+                    sw.setOpen(false);
+                    connected = true;
+                }
+            }
+        }
+        return connected;
+    }
+
+    @Override
+    public boolean disconnect(TerminalExt terminal) {
+        assert terminal instanceof NodeTerminal;
+        int node = ((NodeTerminal) terminal).getNode();
+        // find all paths starting from the current terminal to a busbar section that does not contain an open disconnector
+        // (because otherwise there is nothing we can do to connected the terminal using only breakers)
+        List<TIntArrayList> paths = graph.findAllPaths(node, NodeBreakerVoltageLevel::isBusbarSection, NodeBreakerVoltageLevel::isOpenedDisconnector);
+        for (TIntArrayList path : paths) {
+            for (int i = 0; i < path.size(); i++) {
+                int e = path.get(i);
+                SwitchImpl sw = graph.getEdgeObject(e);
+                if (sw.getKind() == SwitchKind.BREAKER && !sw.isOpen()) {
+                    sw.setOpen(true);
+                    // open just one breaker is enough to disconnect the terminal, so we can stop
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     boolean isConnected(TerminalExt terminal) {
         assert terminal instanceof NodeTerminal;
         int node = ((NodeTerminal) terminal).getNode();
-        // TODO
-        throw new IllegalStateException("TODO");
+        List<TIntArrayList> paths = graph.findAllPaths(node, NodeBreakerVoltageLevel::isBusbarSection, s -> s.isOpen());
+        return paths.size() > 0;
     }
 
     @Override
