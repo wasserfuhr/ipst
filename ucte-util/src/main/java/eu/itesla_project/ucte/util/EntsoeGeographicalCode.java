@@ -18,7 +18,7 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * @author Geoffroy Jamgotchian <geoffroy.jamgotchian at rte-france.com>
  */
-public enum UcteGeographicalCode {
+public enum EntsoeGeographicalCode {
     AT(Country.AT),
     BE(Country.BE),
     CH(Country.CH),
@@ -38,16 +38,16 @@ public enum UcteGeographicalCode {
     UX(null),
     UC(null);
 
-    private static Multimap<Country, UcteGeographicalCode> COUNTRY_TO_GEOGRAPHICAL_CODES;
+    private static Multimap<Country, EntsoeGeographicalCode> COUNTRY_TO_GEOGRAPHICAL_CODES;
 
     private static final Lock LOCK = new ReentrantLock();
 
-    public static Collection<UcteGeographicalCode> forCountry(Country country) {
+    public static Collection<EntsoeGeographicalCode> forCountry(Country country) {
         LOCK.lock();
         try {
             if (COUNTRY_TO_GEOGRAPHICAL_CODES == null) {
                 COUNTRY_TO_GEOGRAPHICAL_CODES = HashMultimap.create();
-                for (UcteGeographicalCode geographicalCode : UcteGeographicalCode.values()) {
+                for (EntsoeGeographicalCode geographicalCode : EntsoeGeographicalCode.values()) {
                     COUNTRY_TO_GEOGRAPHICAL_CODES.put(geographicalCode.getCountry(), geographicalCode);
                 }
             }
@@ -59,7 +59,7 @@ public enum UcteGeographicalCode {
 
     private final Country country;
 
-    UcteGeographicalCode(Country country) {
+    EntsoeGeographicalCode(Country country) {
         this.country = country;
     }
 

@@ -18,7 +18,7 @@ import eu.itesla_project.iidm.import_.Importers;
 import eu.itesla_project.iidm.network.Country;
 import eu.itesla_project.iidm.network.Network;
 import eu.itesla_project.ucte.util.EntsoeFileName;
-import eu.itesla_project.ucte.util.UcteGeographicalCode;
+import eu.itesla_project.ucte.util.EntsoeGeographicalCode;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.Interval;
@@ -107,71 +107,93 @@ public class EntsoeCaseRepository implements CaseRepository {
     }
 
     // because D1 snapshot does not exist and forecast replacement is not yet implemented
-    private static Collection<UcteGeographicalCode> forCountryHacked(Country country) {
-        return UcteGeographicalCode.forCountry(country).stream()
-                .filter(ucteGeographicalCode -> ucteGeographicalCode != UcteGeographicalCode.D1)
+    private static Collection<EntsoeGeographicalCode> forCountryHacked(Country country) {
+        return EntsoeGeographicalCode.forCountry(country).stream()
+                .filter(ucteGeographicalCode -> ucteGeographicalCode != EntsoeGeographicalCode.D1)
                 .collect(Collectors.toList());
-    }
-
-    public static boolean isIntraday(CaseType ct) {
-        return ((ct != null) && (ct.name().startsWith("IDCF")));
     }
 
     public static String intraForecastDistanceInHoursSx(CaseType ct) {
         return ct.name().substring(4,6);
     }
 
-    private <R> R scanRepository(DateTime date, CaseType type, Country country, Function<List<ImportContext>, R> handler) {
-        Collection<UcteGeographicalCode> geographicalCodes = country != null ? forCountryHacked(country)
-                                                                             : Arrays.asList(UcteGeographicalCode.UX, UcteGeographicalCode.UC);
+    private final static List<String> entsoeFoFiletypes = Arrays.asList("FO", "2D", "LR", "RE",
+            "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23");
+    private final static List<String> entsoeSnFiletypes = Arrays.asList("SN");
 
-        DateTime testDate1=date.minusHours(1);
-        String typeDirS=type.name();
-        String typeID=type.name();
-        if (isIntraday(type)) {
-            typeDirS = "IDCF";
-            typeID = intraForecastDistanceInHoursSx(type);
-        } else if (type.equals(CaseType.D2)) {
-            typeDirS="2D"; // because enum names cannot be prefixed with a digit
-            typeID="2D";
+
+    // if FO and forecastDistance is not specified, return dayahead
+    private <R> R scanRepository(DateTime date, CaseType type, Country country, Function<List<ImportContext>, R> handler) {
+        return scanRepository(date, type, null, country, handler);
+    }
+
+    private <R> R scanRepository(DateTime date, CaseType type, Integer forecastDistance, Country country, Function<List<ImportContext>, R> handler) {
+        if ((type == CaseType.SN) && (forecastDistance !=null) && (forecastDistance > 0)) {
+            throw new IllegalArgumentException("forecastDistance must be 0, for a CaseType.SN");
         }
+        Collection<EntsoeGeographicalCode> geographicalCodes = country != null ? forCountryHacked(country)
+                : Arrays.asList(EntsoeGeographicalCode.UX, EntsoeGeographicalCode.UC);
+        DateTime testDate1=date.minusHours(1);
+        String typeID=type.name();
+        List<String> entsoeFileTypes=(type == CaseType.FO) ? entsoeFoFiletypes : entsoeSnFiletypes;
 
         for (EntsoeFormat format : formats) {
             Path formatDir = config.getRootDir().resolve(format.getDirName());
             if (Files.exists(formatDir)) {
-                Path typeDir = formatDir.resolve(typeDirS);
+                Path typeDir = formatDir.resolve(type.name());
                 if (Files.exists(typeDir)) {
                     Path dayDir = typeDir.resolve(String.format("%04d", date.getYear()))
                             .resolve(String.format("%02d", date.getMonthOfYear()))
                             .resolve(String.format("%02d", date.getDayOfMonth()));
                     if (Files.exists(dayDir)) {
                         List<ImportContext> importContexts = null;
-                        for (UcteGeographicalCode geographicalCode : geographicalCodes) {
+                        for (EntsoeGeographicalCode geographicalCode : geographicalCodes) {
                             Collection<String> forbiddenFormats = config.getForbiddenFormatsByGeographicalCode().get(geographicalCode);
                             if (!forbiddenFormats.contains(format.getImporter().getFormat())) {
                                 for (int i = 9; i >= 0; i--) {
-                                    String baseName = String.format("%04d%02d%02d_%02d%02d_" + typeID + "%01d_" + geographicalCode.name() + "%01d",
-                                            date.getYear(), date.getMonthOfYear(), date.getDayOfMonth(), date.getHourOfDay(), date.getMinuteOfHour(),
-                                            date.getDayOfWeek(), i);
-                                    if (testDate1.getHourOfDay() == date.getHourOfDay()) {
-                                        baseName = baseName.substring(0,9)+'B'+baseName.substring(10);
-                                    }
-                                    ReadOnlyDataSource ds = dataSourceFactory.create(dayDir, baseName);
-                                    if (importContexts == null) {
-                                        importContexts = new ArrayList<>();
-                                    }
-                                    if (format.getImporter().exists(ds)) {
-                                        importContexts.add(new ImportContext(format.getImporter(), ds));
+                                    for (String entsoeFiletype:  entsoeFileTypes ){
+                                        String baseName = String.format("%04d%02d%02d_%02d%02d_" + entsoeFiletype + "%01d_" + geographicalCode.name() + "%01d",
+                                                date.getYear(), date.getMonthOfYear(), date.getDayOfMonth(), date.getHourOfDay(), date.getMinuteOfHour(),
+                                                date.getDayOfWeek(), i);
+                                        if (testDate1.getHourOfDay() == date.getHourOfDay()) {
+                                            baseName = baseName.substring(0, 9) + 'B' + baseName.substring(10);
+                                        }
+                                        ReadOnlyDataSource ds = dataSourceFactory.create(dayDir, baseName);
+                                        if (importContexts == null) {
+                                            importContexts = new ArrayList<>();
+                                        }
+                                        EntsoeFileName efileName=EntsoeFileName.parse(baseName);
+                                        if (format.getImporter().exists(ds)) {
+                                            boolean importFile=false;
+                                            switch (type) {
+                                                case SN:
+                                                    if (efileName.isSnapshot()) {
+                                                        importFile=true;
+                                                    }
+                                                    break;
+                                                case FO:
+                                                    // default is day ahead forecasts, when forecastDistance is null
+                                                    if ((forecastDistance == null) && (efileName.isDayAhead())) {
+                                                        importFile=true;
+                                                    } else if ((forecastDistance != null) && (efileName.getForecastDistance() == forecastDistance)) {
+                                                        importFile=true;
+                                                    }
+                                                    break;
+                                            }
+                                            if (importFile) {
+                                                importContexts.add(new ImportContext(format.getImporter(), ds));
+                                            }
+                                        }
                                     }
                                 }
                                 if (importContexts.size()==0 ) {  // for info purposes, only
-                                    String baseName1 = String.format("%04d%02d%02d_%02d%02d_" + typeID + "%01d_" + geographicalCode.name(),
+                                    String baseName1 = String.format("%04d%02d%02d_%02d%02d_" + "["+String.join("|", entsoeFileTypes)+ "]" + "%01d_" + geographicalCode.name(),
                                             date.getYear(), date.getMonthOfYear(), date.getDayOfMonth(), date.getHourOfDay(), date.getMinuteOfHour(),
                                             date.getDayOfWeek());
                                     if (testDate1.getHourOfDay() == date.getHourOfDay()) {
                                         baseName1 = baseName1.substring(0,9)+'B'+baseName1.substring(10);
                                     }
-                                    LOGGER.warn("could not find any file {}[0-9] in directory {}", baseName1, dayDir);
+                                    LOGGER.warn("could not find any file {}[0-9] in directory {}, with forecastDistance {}", baseName1, dayDir, forecastDistance);
                                 }
                             }
                         }
@@ -182,7 +204,7 @@ public class EntsoeCaseRepository implements CaseRepository {
                             }
                         }
                     } else {
-                        LOGGER.warn("could not find any (daydir) directory {}", dayDir);
+                        LOGGER.debug("could not find any (daydir) directory {}", dayDir);
                     }
                 } else {
                     LOGGER.warn("could not find any (typedir) directory {}", typeDir);
@@ -202,11 +224,10 @@ public class EntsoeCaseRepository implements CaseRepository {
         return date;
     }
 
-    @Override
-    public List<Network> load(DateTime date, CaseType type, Country country) {
+    private List<Network> loadNetworks(DateTime date, CaseType type, Integer forecastDistance, Country country) {
         Objects.requireNonNull(date);
         Objects.requireNonNull(type);
-        List<Network> networks2 = scanRepository(toCetDate(date), type, country, importContexts -> {
+        List<Network> networks2 = scanRepository(toCetDate(date), type, forecastDistance, country, importContexts -> {
             List<Network> networks = null;
             if (importContexts.size() > 0) {
                 networks = new ArrayList<>();
@@ -220,15 +241,37 @@ public class EntsoeCaseRepository implements CaseRepository {
         return networks2 == null ? Collections.emptyList() : networks2;
     }
 
+
+    @Override
+    public List<Network> load(DateTime date, CaseType type, Country country) {
+        return loadNetworks(date, type, null, country);
+    }
+
+
+    @Override
+    public List<Network> load(DateTime date, CaseType type, int forecastDistance, Country country) {
+        return loadNetworks(date, type, forecastDistance, country);
+    }
+
+
 	@Override
 	public boolean isDataAvailable(DateTime date, CaseType type, Country country) {
 		return isNetworkDataAvailable(date, type, country);
 	}
 
-	private boolean isNetworkDataAvailable(DateTime date, CaseType type, Country country) {
+    @Override
+    public boolean isDataAvailable(DateTime date, CaseType type, int forecastDistance, Country country) {
+        return isNetworkDataAvailable(date, type, forecastDistance, country);
+    }
+
+    private boolean isNetworkDataAvailable(DateTime date, CaseType type,Country country) {
+        return isNetworkDataAvailable(date,type,null,country);
+    }
+
+    private boolean isNetworkDataAvailable(DateTime date, CaseType type, Integer forecastDistance, Country country) {
 		Objects.requireNonNull(date);
         Objects.requireNonNull(type);
-        return scanRepository(toCetDate(date), type, country, importContexts -> {
+        return scanRepository(toCetDate(date), type, forecastDistance, country, importContexts -> {
             if (importContexts.size() > 0) {
                 for (ImportContext importContext : importContexts) {
                     if (importContext.importer.exists(importContext.ds)) {
@@ -261,38 +304,44 @@ public class EntsoeCaseRepository implements CaseRepository {
         }
     }
 
+    //if casetype is FO, check only dayaheads
     @Override
     public Set<DateTime> dataAvailable(CaseType type, Set<Country> countries, Interval interval) {
-        Set<UcteGeographicalCode> geographicalCodes = new HashSet<>();
+        Set<EntsoeGeographicalCode> geographicalCodes = new HashSet<>();
         if (countries == null) {
-            geographicalCodes.add(UcteGeographicalCode.UX);
-            geographicalCodes.add(UcteGeographicalCode.UC);
+            geographicalCodes.add(EntsoeGeographicalCode.UX);
+            geographicalCodes.add(EntsoeGeographicalCode.UC);
         } else {
             for (Country country : countries) {
                 geographicalCodes.addAll(forCountryHacked(country));
             }
         }
-        Multimap<DateTime, UcteGeographicalCode> dates = HashMultimap.create();
+        Multimap<DateTime, EntsoeGeographicalCode> dates = HashMultimap.create();
 
         String typeDirS=type.name();
-        if (isIntraday(type)) {
-            typeDirS = "IDCF";
-        } else if (type.equals(CaseType.D2)) {
-            typeDirS="2D"; // because enum names cannot be prefixed with a digit
-        }
 
         for (EntsoeFormat format : formats) {
             Path formatDir = config.getRootDir().resolve(format.getDirName());
             if (Files.exists(formatDir)) {
-                Path typeDir = formatDir.resolve(typeDirS);
+                Path typeDir = formatDir.resolve(type.name());
                 if (Files.exists(typeDir)) {
                     browse(typeDir, path -> {
                         EntsoeFileName entsoeFileName = EntsoeFileName.parse(path.getFileName().toString());
-                        UcteGeographicalCode geographicalCode = entsoeFileName.getGeographicalCode();
+                        EntsoeGeographicalCode geographicalCode = entsoeFileName.getGeographicalCode();
                         if (geographicalCode != null
                                 && !config.getForbiddenFormatsByGeographicalCode().get(geographicalCode).contains(format.getImporter().getFormat())
                                 && interval.contains(entsoeFileName.getDate())) {
-                            dates.put(entsoeFileName.getDate(), geographicalCode);
+                            //LOGGER.debug(entsoeFileName.getDate() +", " + entsoeFileName.getForecastDistance() +", "+ path.getFileName().toString());
+                            boolean addFile=false;
+                            if ((type == CaseType.SN) && (entsoeFileName.isSnapshot())) { //snapshot case
+                                addFile=true;
+                            } else if ((type == CaseType.FO) && (entsoeFileName.isDayAhead())) { // FO dayahead(dacf) case
+                                addFile=true;
+                            }
+                            if (addFile == true) {
+                                //LOGGER.debug(" + "+ entsoeFileName.getDate() +", " + entsoeFileName.getForecastDistance() +", "+ path.getFileName().toString());
+                                dates.put(entsoeFileName.getDate(), geographicalCode);
+                            }
                         }
                     });
                 }

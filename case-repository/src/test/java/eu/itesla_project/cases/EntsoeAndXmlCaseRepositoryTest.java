@@ -12,7 +12,7 @@ import eu.itesla_project.iidm.datasource.DataSource;
 import eu.itesla_project.iidm.import_.Importer;
 import eu.itesla_project.iidm.network.Country;
 import eu.itesla_project.iidm.network.Network;
-import eu.itesla_project.ucte.util.UcteGeographicalCode;
+import eu.itesla_project.ucte.util.EntsoeGeographicalCode;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.nio.file.ShrinkWrapFileSystems;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
@@ -171,8 +171,8 @@ public class EntsoeAndXmlCaseRepositoryTest {
     @Test
     public void testLoad() throws Exception {
         // check that, when cim and ucte is forbidden for france, xml is loaded
-        caseRepository.getConfig().getForbiddenFormatsByGeographicalCode().put(UcteGeographicalCode.FR, "CIM1");
-        caseRepository.getConfig().getForbiddenFormatsByGeographicalCode().put(UcteGeographicalCode.FR, "UCTE");
+        caseRepository.getConfig().getForbiddenFormatsByGeographicalCode().put(EntsoeGeographicalCode.FR, "CIM1");
+        caseRepository.getConfig().getForbiddenFormatsByGeographicalCode().put(EntsoeGeographicalCode.FR, "UCTE");
         assertTrue(caseRepository.load(DateTime.parse("2013-01-14T00:15:00+01:00"), CaseType.SN, Country.FR).equals(Collections.singletonList(xmlNetwork)));
     }
 

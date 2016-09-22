@@ -28,17 +28,21 @@ public class EntsoeFileName {
 
     private final int forecastDistance;
 
-    private final UcteGeographicalCode geographicalCode;
+    private final EntsoeGeographicalCode geographicalCode;
+
+    private static long calcMinutes(DateTime date) {
+        return new Interval(date.withTimeAtStartOfDay(),date).toDuration().getStandardMinutes();
+    }
 
     private static long calcForecastDistance(DateTime date, int offset) {
-        return new Interval(date.withTimeAtStartOfDay(),date).toDuration().getStandardMinutes() + offset;
+        return (calcMinutes(date) + offset);
     }
 
 
     public static EntsoeFileName parse(String str) {
         DateTime date = DateTime.now();
         int forecastDistance = 0;
-        UcteGeographicalCode geographicalCode = null;
+        EntsoeGeographicalCode geographicalCode = null;
         Matcher m = DATE_REGEX.matcher(str);
         if (m.matches()) {
             // time zone is Europe/Paris
@@ -70,22 +74,22 @@ public class EntsoeFileName {
                     forecastDistance = 0;
                     break;
                 case "RE" : //Reference //TODO forecastDistance
-                    forecastDistance = 0;
+                    forecastDistance = -1;
                     break;
                 case "LR" : //Long Term Reference  //TODO forecastDistance
-                    forecastDistance = 0;
+                    forecastDistance = -1;
                     break;
                 default: //hh Intraday Forecasts, for the rest of the day: two-digits number is the forecast distance, in hours
                     forecastDistance = Integer.parseInt(m.group(6)) * 60;
                     break;
             }
 
-            geographicalCode = UcteGeographicalCode.valueOf(cCode);
+            geographicalCode = EntsoeGeographicalCode.valueOf(cCode);
         }
         return new EntsoeFileName(date, forecastDistance, geographicalCode);
     }
 
-    private EntsoeFileName(DateTime date, int forecastDistance, UcteGeographicalCode geographicalCode) {
+    private EntsoeFileName(DateTime date, int forecastDistance, EntsoeGeographicalCode geographicalCode) {
         this.date = date;
         this.forecastDistance = forecastDistance;
         this.geographicalCode = geographicalCode;
@@ -99,12 +103,48 @@ public class EntsoeFileName {
         return forecastDistance;
     }
 
-    public UcteGeographicalCode getGeographicalCode() {
+    public EntsoeGeographicalCode getGeographicalCode() {
         return geographicalCode;
     }
 
     public String getCountry() {
         return geographicalCode != null ? geographicalCode.getCountry().toString() : null;
+    }
+
+    public static boolean isIntraday(DateTime date, int forecastDistance) {
+        long  mins=calcMinutes(date);
+        return ((forecastDistance > 0) && (forecastDistance < mins));
+    }
+
+    public static boolean isDayAhead(DateTime date, int forecastDistance) {
+        long  mins=calcMinutes(date);
+        return ((forecastDistance >= mins) && ((forecastDistance-mins) < 29*60));
+    }
+
+    public static boolean isTwoDayAhead(DateTime date, int forecastDistance) {
+        long  mins=calcMinutes(date);
+        return ((forecastDistance > 0) && ((forecastDistance-mins) >= 29*60));
+    }
+
+    public static boolean isSnapshot(DateTime date, int forecastDistance) {
+        return (forecastDistance == 0);
+    }
+
+
+    public boolean isIntraday() {
+        return EntsoeFileName.isIntraday(date,forecastDistance);
+    }
+
+    public boolean isDayAhead() {
+        return EntsoeFileName.isDayAhead(date,forecastDistance);
+    }
+
+    public boolean isTwoDayAhead() {
+        return EntsoeFileName.isDayAhead(date,forecastDistance);
+    }
+
+    public boolean isSnapshot() {
+        return EntsoeFileName.isSnapshot(date,forecastDistance);
     }
 
 }

@@ -30,7 +30,7 @@ public class EntsoeFileNameTest {
         assertTrue(entsoeFileName.getDate().isEqual(DateTime.parse("2014-02-13T08:30:00.000+01:00")));
         assertTrue(entsoeFileName.getForecastDistance() == 0);
         assertTrue(entsoeFileName.getCountry().equals("DE"));
-        assertTrue(entsoeFileName.getGeographicalCode() == UcteGeographicalCode.D2);
+        assertTrue(entsoeFileName.getGeographicalCode() == EntsoeGeographicalCode.D2);
     }
 
     @Test
@@ -48,7 +48,7 @@ public class EntsoeFileNameTest {
         assertTrue(entsoeFileName.getDate().isEqual(DateTime.parse("2016-10-27T02:30:00.000+01:00")));
         assertTrue(entsoeFileName.getForecastDistance() == 0);
         assertTrue(entsoeFileName.getCountry().equals("DE"));
-        assertTrue(entsoeFileName.getGeographicalCode() == UcteGeographicalCode.D2);
+        assertTrue(entsoeFileName.getGeographicalCode() == EntsoeGeographicalCode.D2);
     }
 
     @Test
@@ -58,7 +58,7 @@ public class EntsoeFileNameTest {
         assertTrue(entsoeFileName.getDate().isEqual(DateTime.parse("2016-10-27T02:30:00.000+02:00")));
         assertTrue(entsoeFileName.getForecastDistance() == 1890);
         assertTrue(entsoeFileName.getCountry().equals("DE"));
-        assertTrue(entsoeFileName.getGeographicalCode() == UcteGeographicalCode.D2);
+        assertTrue(entsoeFileName.getGeographicalCode() == EntsoeGeographicalCode.D2);
     }
 
     @Test
@@ -68,7 +68,7 @@ public class EntsoeFileNameTest {
         assertTrue(entsoeFileName.getDate().isEqual(DateTime.parse("2016-10-27T02:30:00.000+02:00")));
         assertTrue(entsoeFileName.getForecastDistance() == 3*60);
         assertTrue(entsoeFileName.getCountry().equals("DE"));
-        assertTrue(entsoeFileName.getGeographicalCode() == UcteGeographicalCode.D2);
+        assertTrue(entsoeFileName.getGeographicalCode() == EntsoeGeographicalCode.D2);
     }
 
     @Test
@@ -76,18 +76,18 @@ public class EntsoeFileNameTest {
         String fileName = "20161027_0230_RE7_D20";
         EntsoeFileName entsoeFileName = EntsoeFileName.parse(fileName);
         assertTrue(entsoeFileName.getDate().isEqual(DateTime.parse("2016-10-27T02:30:00.000+02:00")));
-        assertTrue(entsoeFileName.getForecastDistance() == 0); //TODO
+        assertTrue(entsoeFileName.getForecastDistance() == -1); //TODO
         assertTrue(entsoeFileName.getCountry().equals("DE"));
-        assertTrue(entsoeFileName.getGeographicalCode() == UcteGeographicalCode.D2);
+        assertTrue(entsoeFileName.getGeographicalCode() == EntsoeGeographicalCode.D2);
     }
     @Test
     public void testValidNameLongTimeReference() {
         String fileName = "20161027_0230_LR7_FR0";
         EntsoeFileName entsoeFileName = EntsoeFileName.parse(fileName);
         assertTrue(entsoeFileName.getDate().isEqual(DateTime.parse("2016-10-27T02:30:00.000+02:00")));
-        assertTrue(entsoeFileName.getForecastDistance() == 0); //TODO
+        assertTrue(entsoeFileName.getForecastDistance() == -1); //TODO
         assertTrue(entsoeFileName.getCountry().equals("FR"));
-        assertTrue(entsoeFileName.getGeographicalCode() == UcteGeographicalCode.FR);
+        assertTrue(entsoeFileName.getGeographicalCode() == EntsoeGeographicalCode.FR);
     }
 
     private static List<DateTime> getDateRange(DateTime start, DateTime end, int minutesStep) {
@@ -100,7 +100,7 @@ public class EntsoeFileNameTest {
         return ret;
     }
 
-    private static String toEntsoeFileName(DateTime date, String typeS, UcteGeographicalCode countryCode, int version, String fileSuffix) {
+    private static String toEntsoeFileName(DateTime date, String typeS, EntsoeGeographicalCode countryCode, int version, String fileSuffix) {
         DateTime testDate1=date.minusHours(1);
         String ret=String.format("%04d%02d%02d_%02d%02d_" + typeS + "%01d_" + countryCode.name() + "%01d" + "."+ fileSuffix,
                 date.getYear(), date.getMonthOfYear(), date.getDayOfMonth(), date.getHourOfDay(), date.getMinuteOfHour(), date.getDayOfWeek(), version);
@@ -121,11 +121,11 @@ public class EntsoeFileNameTest {
         // snapshots, generated each quarter of hour
         final int[] idx = {0};
         getDateRange(startDate,endDate,15).stream().forEach(date -> {
-            String entsoeFilenameS=toEntsoeFileName(date,"SN",UcteGeographicalCode.FR,0, "uct");
+            String entsoeFilenameS=toEntsoeFileName(date,"SN", EntsoeGeographicalCode.FR,0, "uct");
             EntsoeFileName entsoeFilename= EntsoeFileName.parse(entsoeFilenameS);
             assert(entsoeFilename.getForecastDistance() == 0);
             assert(entsoeFilename.getCountry().equals(Country.FR.name()));
-            assert(entsoeFilename.getGeographicalCode().equals(UcteGeographicalCode.FR));
+            assert(entsoeFilename.getGeographicalCode().equals(EntsoeGeographicalCode.FR));
             assert(entsoeFilename.getDate().toString().equals(date.toString()));
             idx[0]++;
         });
@@ -143,10 +143,10 @@ public class EntsoeFileNameTest {
         // snapshots, generated each quarter of hour
         final int[] idx = {0};
         getDateRange(startDate,endDate,30).stream().forEach(date -> {
-            String entsoeFilenameS=toEntsoeFileName(date,"FO",UcteGeographicalCode.D2, 0, "uct");
+            String entsoeFilenameS=toEntsoeFileName(date,"FO", EntsoeGeographicalCode.D2, 0, "uct");
             EntsoeFileName entsoeFilename= EntsoeFileName.parse(entsoeFilenameS);
             assertTrue(entsoeFilename.getCountry().equals(Country.DE.name()));
-            assertTrue(entsoeFilename.getGeographicalCode().equals(UcteGeographicalCode.D2));
+            assertTrue(entsoeFilename.getGeographicalCode().equals(EntsoeGeographicalCode.D2));
             assertTrue(entsoeFilename.getDate().toString().equals(date.toString()));
             idx[0]++;
         });

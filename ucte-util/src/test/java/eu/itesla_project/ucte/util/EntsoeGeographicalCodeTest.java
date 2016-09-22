@@ -16,14 +16,14 @@ import static org.junit.Assert.*;
 /**
  * @author Geoffroy Jamgotchian <geoffroy.jamgotchian at rte-france.com>
  */
-public class UcteGeographicalCodeTest {
+public class EntsoeGeographicalCodeTest {
 
     @Test
     public void testForCountry() throws Exception {
-        assertTrue(UcteGeographicalCode.forCountry(Country.FR).equals(Sets.newHashSet(UcteGeographicalCode.FR)));
-        assertTrue(UcteGeographicalCode.forCountry(Country.DE).equals(Sets.newHashSet(
-                UcteGeographicalCode.D1, UcteGeographicalCode.D2, UcteGeographicalCode.D4, UcteGeographicalCode.D7, UcteGeographicalCode.D8)));
-        assertTrue(UcteGeographicalCode.forCountry(null).equals(Sets.newHashSet(
-                UcteGeographicalCode.UX, UcteGeographicalCode.UC)));
+        assertTrue(EntsoeGeographicalCode.forCountry(Country.FR).equals(Sets.newHashSet(EntsoeGeographicalCode.FR)));
+        assertTrue(EntsoeGeographicalCode.forCountry(Country.DE).equals(Sets.newHashSet(
+                EntsoeGeographicalCode.D1, EntsoeGeographicalCode.D2, EntsoeGeographicalCode.D4, EntsoeGeographicalCode.D7, EntsoeGeographicalCode.D8)));
+        assertTrue(EntsoeGeographicalCode.forCountry(null).equals(Sets.newHashSet(
+                EntsoeGeographicalCode.UX, EntsoeGeographicalCode.UC)));
     }
 }

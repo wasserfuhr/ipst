@@ -13,33 +13,6 @@ package eu.itesla_project.cases;
  */
 public enum CaseType {
     SN,
-    FO,
-    D2,
-    LT,
-    RE,
-    IDCF01,
-    IDCF02,
-    IDCF03,
-    IDCF04,
-    IDCF05,
-    IDCF06,
-    IDCF07,
-    IDCF08,
-    IDCF09,
-    IDCF10,
-    IDCF11,
-    IDCF12,
-    IDCF13,
-    IDCF14,
-    IDCF15,
-    IDCF16,
-    IDCF17,
-    IDCF18,
-    IDCF19,
-    IDCF20,
-    IDCF21,
-    IDCF22,
-    IDCF23;
-
+    FO;
 }
 
